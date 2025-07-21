@@ -1,0 +1,1 @@
+terraformer import aws --resources=ec2_instance --regions=eu-north-1

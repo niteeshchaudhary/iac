@@ -40,3 +40,8 @@ configure_vm/vars.yml
 configure_vm/privateip.txt
 configure_vm/inventory.ini
 configure_vm/inventory.ini
+configure_vm/common_key.pem
+docker-compose.pre.yml
+get_infra/.terraform.lock.hcl
+my_infra/.terraform.lock.hcl
+shutdown_env/sec
