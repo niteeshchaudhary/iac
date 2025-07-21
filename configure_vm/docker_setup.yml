@@ -1,0 +1,97 @@
+---
+- name: Install Docker, pull image, and run container
+  hosts: myvms
+  become: yes
+  vars_files:
+    - /mnt/d/github/iac/configure_vm/vars.yml
+  tasks:
+    - name: Debug loaded docker_images
+      debug:
+        var: docker_images
+
+    - name: Debug inventory_hostname
+      debug:
+        var: inventory_hostname
+
+    - name: Debug vm_index calculation
+      debug:
+        msg: "Index = {{ groups['myvms'].index(inventory_hostname) | int }}"
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - lsb-release
+          - python3-pip
+          - python3-docker
+        state: present
+        update_cache: yes
+
+    - name: Install Docker using snap
+      snap:
+        name: docker
+        state: present
+        classic: yes
+
+    - name: Reboot after snap install (ensure snap docker service is available)
+      reboot:
+        msg: "Rebooting after Docker snap install"
+        pre_reboot_delay: 10
+
+    - name: Ensure Docker (snap) is running
+      service:
+        name: snap.docker.dockerd
+        state: started
+        enabled: yes
+
+    - name: Set index for this host
+      set_fact:
+        vm_index: "{{ groups['myvms'].index(inventory_hostname) | int }}"
+
+    - name: Debug docker_images
+      debug:
+        var: docker_images
+
+    - name: Debug vm_index
+      debug:
+        var: vm_index
+
+    - name: Get current host's docker image using nth filter
+      set_fact:
+        current_docker_image: "{{ docker_images[vm_index | int ] }}"
+
+    - name: Get current host's docker ports using nth filter
+      set_fact:
+        current_docker_ports: "{{ docker_ports[vm_index | int] }}"
+
+    - name: Get current host's docker envs using nth filter
+      set_fact:
+        current_docker_envs: "{{ docker_envs[vm_index | int ] }}"
+
+    - name: Debug current variables
+      debug:
+        msg: 
+          - "vm_index: {{ vm_index }}"
+          - "current_docker_image: {{ current_docker_image }}"
+          - "current_docker_ports: {{ current_docker_ports }}"
+          - "current_docker_envs: {{ current_docker_envs }}"
+
+    - name: Pull Docker image
+      docker_image:
+        name: "{{ current_docker_image }}"
+        source: pull
+
+    - name: Run Docker container
+      docker_container:
+        name: app_container
+        image: "{{ current_docker_image }}"
+        state: started
+        restart_policy: always
+        published_ports: >-
+          {{ (current_docker_ports | length > 0) | ternary([current_docker_ports], []) }}
+        env: "{{ current_docker_envs }}"
+        detach: true
+        recreate: true 

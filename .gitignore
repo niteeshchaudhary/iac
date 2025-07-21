@@ -35,3 +35,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+configure_vm/vars.yml
+configure_vm/vars.yml
+configure_vm/privateip.txt
+configure_vm/inventory.ini
+configure_vm/inventory.ini
