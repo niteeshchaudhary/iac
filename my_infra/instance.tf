@@ -57,7 +57,7 @@ resource "aws_instance" "this" {
 
   root_block_device {
     delete_on_termination = true
-    encrypted             = false
+    encrypted             = true
     iops                  = 3000
     throughput            = 125
     volume_size           = 30

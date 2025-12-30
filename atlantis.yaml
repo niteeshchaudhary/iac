@@ -6,4 +6,4 @@ projects:
     autoplan:
       enabled: true
       when_modified:
-        - "myinfra/**/*.tf"
+        - "**/*.tf"
