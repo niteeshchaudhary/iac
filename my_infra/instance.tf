@@ -1,6 +1,6 @@
 resource "aws_instance" "this" {
   count                       = var.instance_count
-  ami                         = "ami-042b4708b1d05f512"
+  ami                         = "ami-12345678"
   associate_public_ip_address = true
   availability_zone           = "eu-north-1b"
 
@@ -57,7 +57,7 @@ resource "aws_instance" "this" {
 
   root_block_device {
     delete_on_termination = true
-    encrypted             = false
+    encrypted             = true
     iops                  = 3000
     throughput            = 125
     volume_size           = 30

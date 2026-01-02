@@ -2,7 +2,7 @@
 instance_count = 5
 
 # Subnet where EC2 instances will be launched
-subnet_id = "subnet-0a1b2c3d4e5f6a7b8"
+subnet_id = "subnet-bdcef1ab9139d8ca0"
 
 # Docker images to run (one per instance or reused as per your logic)
 docker_images = [
