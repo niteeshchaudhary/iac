@@ -1,6 +1,6 @@
 resource "aws_instance" "this" {
   count                       = var.instance_count
-  ami                         = "ami-042b4708b1d05f512"
+  ami                         = "ami-12345678"
   associate_public_ip_address = true
   availability_zone           = "eu-north-1b"
 
